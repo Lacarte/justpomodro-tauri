@@ -123,8 +123,17 @@
             opacity: 0.9;
             max-width: 600px;
             /* Limit width for readability */
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
         }
 
+        .quote.fade-out {
+            opacity: 0;
+        }
+
+        .quote.fade-in {
+            opacity: 1;
+        }
 
         .time-pause {
             position: absolute;
@@ -132,18 +141,19 @@
             right: 50px;
             width: 50px;
             height: 50px;
-            border: 4px solid red;
+            /* border: 4px solid red; */
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 14px;
             font-weight: bold;
-            color: red;
+            color: rgb(0, 0, 0);
             background-color: #fff;
             /* Optional: Add a background color */
         }
 
+  
 
         @keyframes fadeInDown {
             from {
@@ -174,10 +184,13 @@
 <body>
     <div id="timer-container">
         <div id="timer-canvas">
-            <div class="time-pause">20/5</div>
+            <div class="time-pause">20 / 5</div>
             <canvas id="pomodoro-canvas" width="600" height="600"></canvas>
 
             <div class="svg-container">
+
+                <!-- basic svg -->
+                <!--                
                 <svg class="break-indicator" width="35" height="35" viewBox="0 0 35 35">
                     <rect x="2" y="2" width="31" height="31" rx="6" fill="none" stroke="#808080" stroke-width="2" />
                     <circle cx="17.5" cy="17.5" r="7" fill="#ff3355" opacity="0.8" />
@@ -189,6 +202,84 @@
                 <svg class="break-indicator" width="35" height="35" viewBox="0 0 35 35">
                     <rect x="2" y="2" width="31" height="31" rx="6" fill="none" stroke="#808080" stroke-width="2" />
                     <circle cx="17.5" cy="17.5" r="7" fill="#808080" opacity="0.5" />
+                </svg>
+
+ -->
+
+                <!-- advanced svg -->
+
+                <svg class="break-indicator gear-button" width="35" height="35" viewBox="0 0 512.000000 512.000000"
+                    preserveAspectRatio="xMidYMid meet">
+                    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
+                        stroke="none">
+                        <path d="M2165 5101 c-65 -30 -80 -65 -113 -257 -19 -111 -39 -191 -55 -227
+               -69 -150 -232 -245 -406 -235 -99 6 -157 32 -309 141 -143 102 -151 107 -198
+               107 -71 0 -112 -32 -356 -278 -313 -315 -308 -298 -139 -540 125 -178 136
+               -207 136 -338 0 -96 -2 -103 -38 -176 -46 -95 -130 -177 -212 -207 -31 -12
+               -128 -33 -217 -48 -147 -24 -165 -30 -196 -57 -61 -54 -62 -60 -62 -435 0
+               -384 2 -399 68 -445 29 -20 72 -31 208 -54 111 -19 191 -39 227 -55 150 -69
+               245 -232 235 -406 -6 -99 -32 -157 -141 -309 -102 -143 -107 -151 -107 -198 0
+               -71 32 -112 278 -356 315 -313 298 -308 540 -139 178 125 207 136 338 136 96
+               0 103 -2 176 -38 95 -46 177 -130 207 -212 12 -31 33 -128 48 -217 24 -147 30
+               -165 57 -196 54 -61 60 -62 435 -62 384 0 399 2 445 68 20 29 31 72 54 208 19
+               111 39 191 55 227 69 150 232 245 406 235 99 -6 157 -32 309 -141 143 -102
+               151 -107 198 -107 71 0 112 32 356 278 313 315 308 298 139 540 -125 178 -136
+               207 -136 338 0 96 2 103 38 176 46 95 130 177 212 207 31 12 128 33 217 48
+               147 24 165 30 196 57 61 54 62 60 62 435 0 384 -2 399 -68 445 -29 20 -72 31
+               -208 54 -111 19 -191 39 -227 55 -150 69 -245 232 -235 406 6 99 32 157 141
+               309 102 143 107 151 107 198 0 71 -32 -112 -278 356 -315 313 -298 308 -540
+               139 -178 -125 -207 -136 -338 -136 -96 0 -103 2 -176 38 -95 46 -177 130 -207
+               212 -12 31 -33 128 -48 217 -24 147 -30 165 -57 196 -54 61 -60 62 -438 62
+               -314 0 -346 -2 -383 -19z m618 -1231 c725 -124 1211 -809 1087 -1533 -124
+               -725 -809 -1211 -1533 -1087 -725 124 -1211 809 -1087 1533 124 725 809 1211
+               1533 1087z" />
+                        <path d="M2380 3559 c-87 -15 -242 -72 -323 -118 -225 -129 -398 -351 -473
+               -606 -31 -109 -43 -315 -25 -435 60 -383 345 -704 726 -816 109 -31 315 -43
+               435 -25 383 60 704 345 816 726 31 109 43 315 25 435 -60 383 -344 703 -726
+               816 -77 22 -113 27 -245 30 -85 1 -180 -1 -210 -7z m330 -486 c89 -24 151 -62
+               226 -137 110 -110 156 -221 156 -376 0 -155 -46 -266 -156 -376 -110 -110
+               -221 -156 -376 -156 -155 0 -266 46 -376 156 -110 110 -156 221 -156 376 0 93
+               18 173 58 251 29 59 120 158 181 198 124 83 289 106 443 64z" />
+                    </g>
+                </svg>
+
+
+                <svg class="break-indicator play-button" width="35" height="35" viewBox="0 0 512.000000 512.000000"
+                    preserveAspectRatio="xMidYMid meet">
+
+                    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
+                        stroke="none">
+                        <path d="M1005 5114 c-426 -69 -732 -386 -774 -804 -15 -138 -15 -3380 -1
+            -3505 14 -122 35 -194 86 -300 173 -363 586 -568 979 -486 148 31 171 42 700
+            348 66 39 356 206 645 373 289 166 818 471 1175 678 358 206 670 389 695 405
+            66 45 166 144 215 212 248 347 219 827 -70 1134 -27 29 -75 73 -105 96 -30 23
+            -404 244 -830 490 -426 246 -923 533 -1105 638 -181 104 -456 263 -610 352
+            -535 310 -535 310 -670 347 -69 19 -267 32 -330 22z" />
+                    </g>
+                </svg>
+
+                <svg class="break-indicator quote-button" width="35" height="35" viewBox="0 0 512.000000 512.000000"
+                    preserveAspectRatio="xMidYMid meet">
+
+                    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
+                        stroke="none">
+                        <path d="M510 4721 c-216 -30 -412 -192 -483 -400 -22 -65 -22 -73 -25 -742
+           -3 -732 -2 -758 51 -872 54 -118 176 -240 287 -290 108 -48 122 -50 585 -56
+           436 -6 440 -6 485 -29 137 -72 182 -188 161 -415 -5 -62 -20 -143 -31 -182
+           -76 -247 -288 -453 -542 -526 -58 -16 -114 -22 -274 -27 -190 -7 -202 -8 -236
+           -31 -44 -30 -77 -79 -89 -128 -12 -55 -11 -413 2 -474 16 -76 76 -133 155
+           -149 71 -15 346 -6 476 15 429 69 825 322 1060 675 61 92 158 289 192 390 13
+           41 35 120 47 175 l23 100 4 1220 c2 887 0 1236 -8 1280 -33 169 -151 327 -304
+           405 -130 65 -105 63 -826 66 -360 1 -680 -1 -710 -5z" />
+                        <path d="M3265 4720 c-215 -30 -399 -178 -474 -383 l-26 -72 -3 -692 c-3 -765
+           -3 -762 61 -892 40 -84 158 -204 242 -248 126 -66 126 -66 615 -72 437 -6 446
+           -6 487 -29 54 -28 107 -81 135 -135 31 -58 38 -267 14 -387 -47 -229 -209
+           -441 -418 -543 -137 -68 -192 -79 -420 -86 l-196 -6 -43 -30 c-23 -16 -53 -50
+           -66 -74 -22 -43 -23 -52 -23 -278 0 -254 4 -280 58 -336 56 -59 70 -62 277
+           -61 199 1 309 12 435 46 663 173 1124 709 1191 1381 6 64 9 534 7 1267 l-3
+           1165 -22 66 c-61 178 -212 322 -403 385 -50 17 -109 18 -710 20 -360 1 -682
+           -2 -715 -6z" />
+                    </g>
                 </svg>
 
 
@@ -204,109 +295,172 @@
         const canvas = document.getElementById('pomodoro-canvas');
         const ctx = canvas.getContext('2d');
 
-        let remainingTime = 25 * 60;
-        const totalDuration = 25 * 60;
+        const focusQuotes = [
+            "Stay focused, and you'll reach your goal.",
+            "Discipline is the bridge between goals and accomplishments.",
+            "Focus is the key to unlocking your potential.",
+            "Every minute counts—make it matter.",
+            "Your future self will thank you for the effort today."
+        ];
+
+        const pauseQuotes = [
+            "Take a deep breath and relax.",
+            "Rest is just as important as hard work.",
+            "Recharge and come back stronger.",
+            "Pause, reflect, and prepare for greatness.",
+            "Even machines need downtime—so do you."
+        ];
+
+
+        // Define color themes
+        const focusTheme = {
+            primaryColor: "#ff3355", // Red theme
+            shadowColor: "rgba(255, 51, 85, 1)",
+        };
+
+        const pauseTheme = {
+            primaryColor: "#33ff77", // Green theme
+            shadowColor: "rgba(51, 255, 119, 1)",
+        };
+
         const radius = 220;
         let animationFrame;
+        // State variables
+        let isFocus = true; // Track whether the timer is in focus mode
+        let remainingTime = 1 * 60; // Initial focus time
+        const focusDuration = 25 * 60; // 25 minutes
+        const pauseDuration = 5 * 60; // 5 minutes
+        let currentTheme = focusTheme; // Start with the focus theme
 
+
+        // quotes
+
+        let focusQuoteInterval = 5 * 60; // Interval for focus quotes in seconds (default: 5 minutes)
+        let lastQuoteUpdate = 0; // Track the last quote update time
+
+        function updateQuote(quoteText) {
+            const quoteElement = document.querySelector(".quote");
+
+            // Fade-out effect
+            quoteElement.classList.add("fade-out");
+
+            setTimeout(() => {
+                // Update quote and apply fade-in effect
+                quoteElement.textContent = quoteText;
+                quoteElement.classList.remove("fade-out");
+                quoteElement.classList.add("fade-in");
+
+                // Remove fade-in class after animation completes
+                setTimeout(() => {
+                    quoteElement.classList.remove("fade-in");
+                }, 500); // Match fade-in duration
+            }, 500); // Match fade-out duration
+        }
+
+        function getRandomQuote(quotes) {
+            return quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        function handleFocusQuotes(currentTime) {
+            if (currentTime - lastQuoteUpdate >= focusQuoteInterval) {
+                const randomQuote = getRandomQuote(focusQuotes);
+                updateQuote(randomQuote);
+                lastQuoteUpdate = currentTime;
+            }
+        }
+
+        function handlePauseQuotes() {
+            const randomQuote = getRandomQuote(pauseQuotes);
+            updateQuote(randomQuote);
+        }
+
+
+        //draw logic
         function drawTimer() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw background circle (no rounded caps)
+            // Draw background circle
             ctx.beginPath();
-            ctx.lineCap = 'butt'; // Explicitly set to butt for background
+            ctx.lineCap = "butt";
             ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
-            ctx.strokeStyle = '#2c2c2c';
+            ctx.strokeStyle = "#2c2c2c";
             ctx.lineWidth = 30;
             ctx.stroke();
 
-
-            // Draw background circle (no rounded caps)
-            ctx.beginPath();
-            ctx.lineCap = 'butt'; // Explicitly set to butt for background
-            ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
-            ctx.strokeStyle = '#2c2c2c';
-            ctx.lineWidth = 32;
-            ctx.stroke();
-
-            // Draw glowing dashed circle (no rounded caps)
+            // Glowing progress circle
             ctx.save();
-            ctx.lineCap = 'butt'; // Explicitly set to butt for dashed circle
+            ctx.lineCap = "butt";
             ctx.setLineDash([5, 5]);
-
             ctx.shadowBlur = 32;
-            ctx.shadowColor = "rgba(255, 51, 85, 1)";
-            ctx.strokeStyle = "#ff3355";
+            ctx.shadowColor = currentTheme.shadowColor; // Use the current theme
+            ctx.strokeStyle = currentTheme.primaryColor;
             ctx.lineWidth = 24;
-            ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, 1.6 * Math.PI);
-            ctx.stroke();
 
-            // Second glow layer - intense core
-            ctx.shadowBlur = 24;
-            ctx.shadowColor = "rgba(255, 51, 85, 0.8)";
-            ctx.strokeStyle = "#ff4466";
-            ctx.lineWidth = 24;
-            ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, 1.6 * Math.PI);
-            ctx.stroke();
+            const progressAngle =
+                ((isFocus ? focusDuration - remainingTime : pauseDuration - remainingTime) /
+                    (isFocus ? focusDuration : pauseDuration)) *
+                2 *
+                Math.PI;
 
-            // Third glow layer - brightest center
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = "#ff3355";
-            ctx.strokeStyle = "#ff5577";
-            ctx.lineWidth = 24;
             ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, 1.6 * Math.PI);
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, progressAngle - Math.PI / 2, false);
             ctx.stroke();
-
             ctx.restore();
 
-            // Draw time progress with rounded caps
-            const progressAngle = ((totalDuration - remainingTime) / totalDuration) * 2 * Math.PI;
-            ctx.beginPath();
-            ctx.lineCap = 'round'; // Apply rounded caps only to progress arc
-            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, progressAngle - Math.PI / 2, false);
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 24;
-            ctx.stroke();
-
-            // Reset lineCap for text rendering
-            ctx.lineCap = 'butt';
-
-            // Draw remaining time in the center
+            // Draw time remaining in the center
             const minutes = Math.floor(remainingTime / 60);
             const seconds = remainingTime % 60;
-            const timeText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            const timeText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-            ctx.shadowColor = 'rgba(255, 51, 85, 0.5)';
+            ctx.shadowColor = currentTheme.shadowColor;
             ctx.shadowBlur = 10;
-            ctx.fillStyle = '#ff3355';
-            ctx.font = '400 100px Source Code Pro';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            ctx.fillStyle = currentTheme.primaryColor;
+            ctx.font = "400 100px Source Code Pro";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
             ctx.fillText(timeText, canvas.width / 2, canvas.height / 2);
             ctx.shadowBlur = 0;
 
-            // Draw focus text above
-            ctx.font = '500 28px Inria Sans';
-            ctx.fillStyle = '#ff3355';
-            ctx.fillText('FOCUS', canvas.width / 2, canvas.height / 2 - 90);
-
-            // Draw accumulated timer below
-            ctx.fillStyle = '#909090';
-            ctx.font = '300 28px Inria Sans';
-            ctx.fillText('02:45HRS 3BRKS', canvas.width / 2, canvas.height / 2 + 66);
+            // Draw focus or pause text above the timer
+            ctx.font = "500 28px Inria Sans";
+            ctx.fillStyle = currentTheme.primaryColor;
+            ctx.fillText(isFocus ? "FOCUS" : "PAUSE", canvas.width / 2, canvas.height / 2 - 90);
         }
-
 
         function updateTimer() {
             if (remainingTime > 0) {
                 remainingTime -= 1;
+
+                if (isFocus) {
+                    handleFocusQuotes(focusDuration - remainingTime); // Pass elapsed focus time
+                }
+
                 drawTimer();
                 animationFrame = requestAnimationFrame(() => setTimeout(updateTimer, 1000));
+            } else {
+                switchState();
             }
         }
+
+        function switchState() {
+            isFocus = !isFocus; // Toggle focus/pause
+            remainingTime = isFocus ? focusDuration : pauseDuration; // Reset time
+            currentTheme = isFocus ? focusTheme : pauseTheme; // Change theme
+
+            // Pick a random quote immediately
+            if (isFocus) {
+                const randomQuote = getRandomQuote(focusQuotes);
+                updateQuote(randomQuote);
+                lastQuoteUpdate = 0; // Reset quote interval tracking
+            } else {
+                handlePauseQuotes();
+            }
+
+            drawTimer(); // Redraw with new state
+            updateTimer(); // Start new session
+        }
+
+
 
         // Wait for fonts to load before drawing
         document.fonts.ready.then(() => {
