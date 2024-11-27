@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Pomodoro Timer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@300;400;700&family=Roboto:wght@400&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #111111;
+            color: #ffffff;
+            font-family: 'Inria Sans', sans-serif;
+        }
+
+        #timerCanvas {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #quote {
+            position: absolute;
+            top: 80px;
+            right: -90px;
+            color: #a3a3a3;
+            font-size: 1.15rem;
+            width: 150px;
+            text-align: start;
+            font-family: 'Inria Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            opacity: 0.9;
+            animation: fadeInDown 0.8s ease-out forwards;
+            letter-spacing: 0.02em;
+            /* display: flex; */
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .quote-text {
+            position: relative;
+            margin-top: 10px;
+            min-height: fit-content;
+            font-style: italic;
+        }
+
+        .quotation-mark {
+            font-size: 7rem;
+            font-family: 'Playfair Display', serif;
+            color: #ff3355;
+            line-height: 0;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            text-shadow: 0 0 20px rgba(255, 51, 85, 0.3);
+            opacity: 0.9;
+            z-index: 1;
+        }
+
+
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 160px;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .break-indicator {
+            transition: all 0.3s ease;
+        }
+
+        .break-indicator:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        #pomodoroCanvas {
+            filter: drop-shadow(0 0 30px rgba(255, 51, 85, 0.1));
+        }
+    </style>
+</head>
+
+<body>
+    <div id="timerCanvas">
+        <!-- <div id="quote">
+            <span class="quotation-mark">“</span>
+            <div class="quote-text">
+                The only limit to your impact is your imagination and commitment.
+            </div>
+        </div> -->
+        <canvas id="pomodoroCanvas" width="600" height="600"></canvas>
+        <div class="svg-container">
+            <svg class="break-indicator" width="35" height="35" viewBox="0 0 35 35">
+                <rect x="2" y="2" width="31" height="31" rx="6" fill="none" stroke="#808080" stroke-width="2" />
+                <circle cx="17.5" cy="17.5" r="7" fill="#ff3355" opacity="0.8" />
+            </svg>
+            
+            <svg class="break-indicator" width="35" height="35" viewBox="0 0 35 35">
+                <rect x="2" y="2" width="31" height="31" rx="6" fill="none" stroke="#808080" stroke-width="2" />
+                <circle cx="17.5" cy="17.5" r="7" fill="#808080" opacity="0.5" />
+            </svg>
+            <svg class="break-indicator" width="35" height="35" viewBox="0 0 35 35">
+                <rect x="2" y="2" width="31" height="31" rx="6" fill="none" stroke="#808080" stroke-width="2" />
+                <circle cx="17.5" cy="17.5" r="7" fill="#808080" opacity="0.5" />
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('pomodoroCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let remainingTime = 25 * 60;
+        const totalDuration = 25 * 60;
+        const radius = 220;
+        let animationFrame;
+
+        function drawTimer() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw background circle (no rounded caps)
+            ctx.beginPath();
+            ctx.lineCap = 'butt'; // Explicitly set to butt for background
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#2c2c2c';
+            ctx.lineWidth = 20;
+            ctx.stroke();
+
+            // Draw glowing dashed circle (no rounded caps)
+            ctx.save();
+            ctx.lineCap = 'butt'; // Explicitly set to butt for dashed circle
+            ctx.setLineDash([2, 4]);
+
+            ctx.shadowBlur = 32;
+            ctx.shadowColor = "rgba(255, 51, 85, 0.6)";
+            ctx.strokeStyle = "#ff3355";
+            ctx.lineWidth = 24;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, 1.6 * Math.PI);
+            ctx.stroke();
+
+            // Second glow layer - intense core
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "rgba(255, 51, 85, 0.8)";
+            ctx.strokeStyle = "#ff4466";
+            ctx.lineWidth = 24;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, 1.6 * Math.PI);
+            ctx.stroke();
+
+            // Third glow layer - brightest center
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = "#ff3355";
+            ctx.strokeStyle = "#ff5577";
+            ctx.lineWidth = 24;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, 1.6 * Math.PI);
+            ctx.stroke();
+
+            ctx.restore();
+
+            // Draw time progress with rounded caps
+            const progressAngle = ((totalDuration - remainingTime) / totalDuration) * 2 * Math.PI;
+            ctx.beginPath();
+            ctx.lineCap = 'round'; // Apply rounded caps only to progress arc
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius, -Math.PI / 2, progressAngle - Math.PI / 2, false);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 26;
+            ctx.stroke();
+
+            // Reset lineCap for text rendering
+            ctx.lineCap = 'butt';
+
+            // Draw remaining time in the center
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            const timeText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            ctx.shadowColor = 'rgba(255, 51, 85, 0.3)';
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = '#ff3355';
+            ctx.font = '400 86px Roboto';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(timeText, canvas.width / 2, canvas.height / 2);
+            ctx.shadowBlur = 0;
+
+            // Draw focus text above
+            ctx.font = '500 40px Inria Sans';
+            ctx.fillStyle = '#ff3355';
+            ctx.fillText('FOCUS', canvas.width / 2, canvas.height / 2 - 90);
+
+            // Draw accumulated timer below
+            ctx.fillStyle = '#808080';
+            ctx.font = '300 28px Inria Sans';
+            ctx.fillText('02:45HRS 3BRKS', canvas.width / 2, canvas.height / 2 + 66);
+        }
+
+
+
+
+        function updateTimer() {
+            if (remainingTime > 0) {
+                remainingTime -= 1;
+                drawTimer();
+                animationFrame = requestAnimationFrame(() => setTimeout(updateTimer, 1000));
+            }
+        }
+
+        // Wait for fonts to load before drawing
+        document.fonts.ready.then(() => {
+            drawTimer();
+            updateTimer();
+        });
+
+        // Cleanup
+        window.addEventListener('beforeunload', () => {
+            cancelAnimationFrame(animationFrame);
+        });
+    </script>
+</body>
+
+</html>
