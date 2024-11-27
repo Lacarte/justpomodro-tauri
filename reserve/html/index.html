@@ -139,6 +139,10 @@
             background-color: #fff;
             /* Optional: Add a background color */
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -169,8 +173,43 @@
 
                 <!-- advanced svg -->
 
-                <svg class="break-indicator gear-button" width="35" height="35" viewBox="0 0 512.000000 512.000000"
-                    preserveAspectRatio="xMidYMid meet">
+                <div id="play-pause-wrapper">
+
+                    <svg id="playIcon" class="break-indicator play-button" width="35" height="35"
+                        viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+
+                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
+                            stroke="none">
+                            <path d="M1005 5114 c-426 -69 -732 -386 -774 -804 -15 -138 -15 -3380 -1
+            -3505 14 -122 35 -194 86 -300 173 -363 586 -568 979 -486 148 31 171 42 700
+            348 66 39 356 206 645 373 289 166 818 471 1175 678 358 206 670 389 695 405
+            66 45 166 144 215 212 248 347 219 827 -70 1134 -27 29 -75 73 -105 96 -30 23
+            -404 244 -830 490 -426 246 -923 533 -1105 638 -181 104 -456 263 -610 352
+            -535 310 -535 310 -670 347 -69 19 -267 32 -330 22z" />
+                        </g>
+                    </svg>
+
+
+                    <svg id="pauseIcon" class="break-indicator play-button hidden" width="35" height="35"
+                        viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+
+                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
+                            stroke="none">
+                            <path d="M1076 5104 c-253 -57 -445 -229 -533 -479 l-28 -80 0 -1985 0 -1985
+               28 -80 c111 -316 400 -513 723 -492 180 12 325 79 460 212 64 64 90 98 126
+               172 90 179 83 -7 83 2173 0 2180 7 1994 -83 2173 -81 163 -239 296 -417 353
+               -104 33 -259 41 -359 18z" />
+                            <path d="M3774 5110 c-143 -26 -265 -92 -380 -205 -64 -64 -89 -98 -126 -172
+               -90 -179 -83 7 -83 -2173 0 -2180 -7 -1994 83 -2173 81 -163 237 -295 417
+               -354 68 -22 98 -26 205 -27 141 -1 211 14 321 68 174 86 298 228 366 421 l28
+               80 0 1985 0 1985 -28 80 c-84 236 -262 407 -492 470 -72 19 -240 27 -311 15z" />
+                        </g>
+                    </svg>
+                </div>
+
+
+                <svg id="gearButton" class="break-indicator gear-button" width="35" height="35"
+                    viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
                         stroke="none">
                         <path d="M2165 5101 c-65 -30 -80 -65 -113 -257 -19 -111 -39 -191 -55 -227
@@ -205,22 +244,11 @@
                 </svg>
 
 
-                <svg class="break-indicator play-button" width="35" height="35" viewBox="0 0 512.000000 512.000000"
-                    preserveAspectRatio="xMidYMid meet">
 
-                    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
-                        stroke="none">
-                        <path d="M1005 5114 c-426 -69 -732 -386 -774 -804 -15 -138 -15 -3380 -1
-            -3505 14 -122 35 -194 86 -300 173 -363 586 -568 979 -486 148 31 171 42 700
-            348 66 39 356 206 645 373 289 166 818 471 1175 678 358 206 670 389 695 405
-            66 45 166 144 215 212 248 347 219 827 -70 1134 -27 29 -75 73 -105 96 -30 23
-            -404 244 -830 490 -426 246 -923 533 -1105 638 -181 104 -456 263 -610 352
-            -535 310 -535 310 -670 347 -69 19 -267 32 -330 22z" />
-                    </g>
-                </svg>
+    
 
-                <svg class="break-indicator quote-button" width="35" height="35" viewBox="0 0 512.000000 512.000000"
-                    preserveAspectRatio="xMidYMid meet">
+                <svg id="quoteButton" class="break-indicator quote-button" width="35" height="35"
+                    viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
 
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#808080"
                         stroke="none">
@@ -244,6 +272,8 @@
                 </svg>
 
 
+
+
             </div>
         </div>
         <!-- Add the quote directly below the clock -->
@@ -255,6 +285,34 @@
     <script>
         const canvas = document.getElementById('pomodoro-canvas');
         const ctx = canvas.getContext('2d');
+
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+
+        const gearButton = document.getElementById('gearButton');
+        const playButton = document.getElementById('playButton');
+        const quoteButton = document.getElementById('quoteButton');
+
+        const playPause = document.getElementById('play-pause-wrapper');
+
+
+        const notificationSoundFocus = document.getElementById('notificationSoundFocus');
+        const notificationSoundBreak = document.getElementById('notificationSoundBreak');
+        const focusTimeInput = document.getElementById('focusTimeInput');
+        const breakTimeInput = document.getElementById('breakTimeInput');
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const resetTimerBtn = document.getElementById('resetTimerBtn');
+        const soundToggle = document.getElementById('soundToggle');
+        const systemNotificationToggle = document.getElementById('systemNotificationToggle');
+        const trayToggle = document.getElementById('trayToggle');
+        const startupToggle = document.getElementById('startupToggle');
+        const alwaysOnTopToggle = document.getElementById('alwaysOnTopToggle');
+        const focusOnSwitchToggle = document.getElementById('focusOnSwitchToggle');
+
+
+
 
         const focusQuotes = [
             // Original quotes
@@ -371,6 +429,7 @@
             shadowColor: "rgba(51, 255, 119, 1)",
         };
 
+        let isPlaying = false;
 
         const radius = 220;
         let animationFrame;
@@ -557,10 +616,49 @@
             updateTimer();
         });
 
+
+
+        playPause.addEventListener('click', function () {
+            isPlaying = !isPlaying;
+
+            // Toggle visibility of icons
+            playIcon.classList.toggle('hidden');
+            pauseIcon.classList.toggle('hidden');
+
+            // You can add your play/pause functionality here
+            if (playIcon.classList.contains('hidden')) {
+                console.log('Now playing');
+            } else {
+                console.log('Now paused');
+            }
+        });
+
+
+        quoteButton.addEventListener('click', function () {
+            console.log('click on Quote');
+            if (isFocus) {
+                // Focus session started, show a random focus quote
+                const randomQuote = getRandomQuote(focusQuotes);
+                updateQuote(randomQuote);
+                lastQuoteUpdate = 0; // Reset quote interval tracking
+            } else {
+                handlePauseQuotes();
+            }
+        });
+
+        gearButton.addEventListener('click', function () {
+            console.log('click on Gear');
+
+        });
+
+
         // Cleanup
         window.addEventListener('beforeunload', () => {
             cancelAnimationFrame(animationFrame);
         });
+
+
+
     </script>
 </body>
 
