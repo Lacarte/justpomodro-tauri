@@ -12,6 +12,11 @@
         rel="stylesheet">
 
     <style>
+        :root {
+            --hover-border-color: #F63153;
+            /* Define the variable for hover border color */
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -54,25 +59,6 @@
             align-items: flex-end;
         }
 
-        .quote-text {
-            position: relative;
-            margin-top: 10px;
-            min-height: fit-content;
-            font-style: italic;
-        }
-
-        .quotation-mark {
-            font-size: 7rem;
-            font-family: 'Playfair Display', serif;
-            color: #ff3355;
-            line-height: 0;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            text-shadow: 0 0 20px rgba(255, 51, 85, 0.3);
-            opacity: 0.9;
-            z-index: 1;
-        }
 
         .svg-container {
             display: flex;
@@ -94,8 +80,8 @@
 
         .break-indicator:hover {
             transform: scale(1.1);
-            border: 3px solid #F63153;
-
+            border: 3px solid var(--hover-border-color);
+            /* Use the variable here */
         }
 
         #pomodoro-canvas {
@@ -113,7 +99,8 @@
         }
 
         .quote-container {
-            margin-top: 20px;
+            margin-top: 12px;
+            font-size: 1.125rem;
         }
 
         .quote {
@@ -151,32 +138,6 @@
             color: rgb(0, 0, 0);
             background-color: #fff;
             /* Optional: Add a background color */
-        }
-
-
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-
-            to {
-                opacity: 0.9;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translate(-50%, 20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
         }
     </style>
 </head>
@@ -390,11 +351,12 @@
             shadowColor: "rgba(51, 255, 119, 1)",
         };
 
+
         const radius = 220;
         let animationFrame;
         // State variables
         let isFocus = true; // Track whether the timer is in focus mode
-        let remainingTime = 1 * 60; // Initial focus time
+        let remainingTime = 0 * 60; // Initial focus time
         const focusDuration = 25 * 60; // 25 minutes
         const pauseDuration = 5 * 60; // 5 minutes
         let currentTheme = focusTheme; // Start with the focus theme
@@ -490,9 +452,17 @@
 
             // Draw focus or pause text above the timer
             ctx.font = "500 28px Inria Sans";
-            ctx.fillStyle = currentTheme.primaryColor;
+            ctx.fillStyle = currentTheme.shadowColor;
             ctx.fillText(isFocus ? "FOCUS" : "PAUSE", canvas.width / 2, canvas.height / 2 - 90);
+
+            // Draw accumulated timer below
+            ctx.fillStyle = '#909090';
+            ctx.font = '300 28px Inria Sans';
+            ctx.fillText('02:45HRS 3BRKS', canvas.width / 2, canvas.height / 2 + 66);
+
         }
+
+
 
         function updateTimer() {
             if (remainingTime > 0) {
@@ -509,10 +479,12 @@
             }
         }
 
+
         function switchState() {
             isFocus = !isFocus; // Toggle focus/pause
             remainingTime = isFocus ? focusDuration : pauseDuration; // Reset time
             currentTheme = isFocus ? focusTheme : pauseTheme; // Change theme
+            setHoverBorderColor(currentTheme.primaryColor);
 
             // Pick a random quote immediately
             if (isFocus) {
@@ -528,6 +500,9 @@
         }
 
 
+        function setHoverBorderColor(color) {
+            document.documentElement.style.setProperty('--hover-border-color', color);
+        }
 
         // Wait for fonts to load before drawing
         document.fonts.ready.then(() => {
