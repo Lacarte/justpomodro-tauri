@@ -13,7 +13,7 @@
 
     <style>
         :root {
-            --hover-border-color: #F63153;
+            --border-color: #F63153;
             /* Define the variable for hover border color */
         }
 
@@ -80,7 +80,7 @@
 
         .break-indicator:hover {
             transform: scale(1.1);
-            border: 3px solid var(--hover-border-color);
+            border: 3px solid var(--border-color);
             /* Use the variable here */
         }
 
@@ -128,7 +128,7 @@
             right: 50px;
             width: 50px;
             height: 50px;
-            /* border: 4px solid red; */
+            border: 4px solid var(--border-color);
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -336,7 +336,27 @@
             "Rest is just as important as hard work.",
             "Recharge and come back stronger.",
             "Pause, reflect, and prepare for greatness.",
-            "Even machines need downtime—so do you."
+            "Even machines need downtime—so do you.",
+            "Your mind deserves a moment of peace.",
+            "Inhale calm, exhale stress.",
+            "The best ideas often come after a break.",
+            "Find stillness and let it renew you.",
+            "A pause isn't wasted time; it's fuel for your next move.",
+            "Greatness is built on rest and reflection.",
+            "Pause. Recharge. You’re doing amazing.",
+            "Even the strongest need a moment to breathe.",
+            "Take a step back to leap forward.",
+            "Your energy is your greatest tool—restore it.",
+            "Rest today to conquer tomorrow.",
+            "You can't pour from an empty cup. Take time to refill.",
+            "Breaks are where clarity begins.",
+            "Silence the noise, and let your creativity flow.",
+            "Resting is not quitting; it’s preparing.",
+            "Slow down, and let the moment sink in.",
+            "In rest, you discover strength.",
+            "Peace begins with a pause.",
+            "Let the world pause with you for a second.",
+            "Embrace the pause; it holds magic."
         ];
 
 
@@ -357,9 +377,13 @@
         // State variables
         let isFocus = true; // Track whether the timer is in focus mode
         let remainingTime = 0 * 60; // Initial focus time
-        const focusDuration = 25 * 60; // 25 minutes
-        const pauseDuration = 5 * 60; // 5 minutes
+        const focusDuration = 2 * 60; // 25 minutes
+        const pauseDuration = 1 * 60; // 5 minutes
         let currentTheme = focusTheme; // Start with the focus theme
+
+
+        let totalFocusSeconds = 0;
+        let breakCount = 0;
 
 
         // quotes
@@ -401,6 +425,26 @@
         function handlePauseQuotes() {
             const randomQuote = getRandomQuote(pauseQuotes);
             updateQuote(randomQuote);
+        }
+
+
+        function formatTimeDisplay(seconds, breakCount) {
+            const minutes = Math.floor(seconds / 60);
+
+            let timeDisplay;
+            if (minutes >= 60) {
+                const hours = Math.floor(minutes / 60);
+                const remainingMinutes = minutes % 60;
+                timeDisplay = `${hours}:${String(remainingMinutes).padStart(2, "0")}HR`;
+            } else if (minutes === 1) {
+                timeDisplay = `01MN`; // Singular minute
+            } else if (minutes > 1) {
+                timeDisplay = `${String(minutes).padStart(2, "0")}MNS`; // Plural minutes
+            } else {
+                timeDisplay = `00MN`; // Exactly 0 minutes
+            }
+            const breakDisplay = breakCount === 1 ? `01BRK` : `${String(breakCount).padStart(2, "0")}BRKS`; // Singular/Plural breaks
+            return `${timeDisplay} ${breakDisplay}`;
         }
 
 
@@ -456,12 +500,11 @@
             ctx.fillText(isFocus ? "FOCUS" : "PAUSE", canvas.width / 2, canvas.height / 2 - 90);
 
             // Draw accumulated timer below
-            ctx.fillStyle = '#909090';
-            ctx.font = '300 28px Inria Sans';
-            ctx.fillText('02:45HRS 3BRKS', canvas.width / 2, canvas.height / 2 + 66);
-
+            const trackerText = formatTimeDisplay(totalFocusSeconds, breakCount);
+            ctx.fillStyle = "#909090";
+            ctx.font = "300 28px Inria Sans";
+            ctx.fillText(trackerText, canvas.width / 2, canvas.height / 2 + 66);
         }
-
 
 
         function updateTimer() {
@@ -469,13 +512,15 @@
                 remainingTime -= 1;
 
                 if (isFocus) {
+                    // Increment focus time during focus sessions
+                    totalFocusSeconds++;
                     handleFocusQuotes(focusDuration - remainingTime); // Pass elapsed focus time
                 }
 
-                drawTimer();
+                drawTimer(); // Update the UI
                 animationFrame = requestAnimationFrame(() => setTimeout(updateTimer, 1000));
             } else {
-                switchState();
+                switchState(); // Switch between focus and pause
             }
         }
 
@@ -486,22 +531,24 @@
             currentTheme = isFocus ? focusTheme : pauseTheme; // Change theme
             setHoverBorderColor(currentTheme.primaryColor);
 
-            // Pick a random quote immediately
             if (isFocus) {
+                // Focus session started, show a random focus quote
                 const randomQuote = getRandomQuote(focusQuotes);
                 updateQuote(randomQuote);
                 lastQuoteUpdate = 0; // Reset quote interval tracking
             } else {
+                // Increment break count only after a pause session ends
+                breakCount++;
                 handlePauseQuotes();
             }
 
             drawTimer(); // Redraw with new state
-            updateTimer(); // Start new session
+            updateTimer(); // Start the new countdown
         }
 
 
         function setHoverBorderColor(color) {
-            document.documentElement.style.setProperty('--hover-border-color', color);
+            document.documentElement.style.setProperty('--border-color', color);
         }
 
         // Wait for fonts to load before drawing
