@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-    href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@300;400;700&family=Roboto:wght@400&family=Playfair+Display:wght@700&family=Source+Code+Pro:wght@400&display=swap"
-    rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@300;400;700&family=Roboto:wght@400&family=Playfair+Display:wght@700&family=Source+Code+Pro:wght@400&display=swap"
+        rel="stylesheet">
 
     <style>
         * {
@@ -28,7 +28,7 @@
             font-family: 'Inria Sans', sans-serif;
         }
 
-        #timerCanvas {
+        #timer-canvas {
             position: relative;
             display: flex;
             justify-content: center;
@@ -87,11 +87,63 @@
 
         .break-indicator {
             transition: all 0.3s ease;
+            border: 3px solid #48484828;
+            border-radius: 8px;
+            padding: 4px;
         }
 
         .break-indicator:hover {
             transform: scale(1.1);
+            border: 3px solid #F63153;
+
         }
+
+        #pomodoro-canvas {
+            filter: drop-shadow(0 0 30px rgba(255, 51, 85, 0.1));
+        }
+
+
+        #timer-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        .quote-container {
+            margin-top: 20px;
+        }
+
+        .quote {
+            font-family: 'Inria Sans', sans-serif;
+            /* font-style: italic; */
+            color: #a3a3a3;
+            opacity: 0.9;
+            max-width: 600px;
+            /* Limit width for readability */
+        }
+
+
+        .time-pause {
+            position: absolute;
+            top: 100px;
+            right: 50px;
+            width: 50px;
+            height: 50px;
+            border: 4px solid red;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: red;
+            background-color: #fff;
+            /* Optional: Add a background color */
+        }
+
 
         @keyframes fadeInDown {
             from {
@@ -116,47 +168,15 @@
                 transform: translate(-50%, 0);
             }
         }
-
-        #pomodoroCanvas {
-            filter: drop-shadow(0 0 30px rgba(255, 51, 85, 0.1));
-        }
-
-
-        #timerContainer {
-            display: flex;
-            flex-direction: column;
-            /* Stack elements vertically */
-            justify-content: center;
-            /* Center contents vertically */
-            align-items: center;
-            /* Center contents horizontally */
-            text-align: center;
-            /* Ensure text aligns properly */
-            width: 100%;
-            /* Full width for responsiveness */
-        }
-
-        .quote-container {
-            margin-top: 20px;
-            /* Add some space between the clock and the quote */
-        }
-
-        .quote {
-            font-family: 'Inria Sans', sans-serif;
-            /* font-style: italic; */
-            color: #a3a3a3;
-            opacity: 0.9;
-            max-width: 600px;
-            /* Limit width for readability */
-        }
     </style>
 </head>
 
 <body>
+    <div id="timer-container">
+        <div id="timer-canvas">
+            <div class="time-pause">20/5</div>
+            <canvas id="pomodoro-canvas" width="600" height="600"></canvas>
 
-    <div id="timerContainer">
-        <div id="timerCanvas">
-            <canvas id="pomodoroCanvas" width="600" height="600"></canvas>
             <div class="svg-container">
                 <svg class="break-indicator" width="35" height="35" viewBox="0 0 35 35">
                     <rect x="2" y="2" width="31" height="31" rx="6" fill="none" stroke="#808080" stroke-width="2" />
@@ -170,6 +190,8 @@
                     <rect x="2" y="2" width="31" height="31" rx="6" fill="none" stroke="#808080" stroke-width="2" />
                     <circle cx="17.5" cy="17.5" r="7" fill="#808080" opacity="0.5" />
                 </svg>
+
+
             </div>
         </div>
         <!-- Add the quote directly below the clock -->
@@ -179,7 +201,7 @@
     </div>
 
     <script>
-        const canvas = document.getElementById('pomodoroCanvas');
+        const canvas = document.getElementById('pomodoro-canvas');
         const ctx = canvas.getContext('2d');
 
         let remainingTime = 25 * 60;
@@ -191,12 +213,21 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw background circle (no rounded caps)
-            // ctx.beginPath();
-            // ctx.lineCap = 'butt'; // Explicitly set to butt for background
-            // ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
-            // ctx.strokeStyle = '#2c2c2c';
-            // ctx.lineWidth = 32;
-            // ctx.stroke();
+            ctx.beginPath();
+            ctx.lineCap = 'butt'; // Explicitly set to butt for background
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#2c2c2c';
+            ctx.lineWidth = 30;
+            ctx.stroke();
+
+
+            // Draw background circle (no rounded caps)
+            ctx.beginPath();
+            ctx.lineCap = 'butt'; // Explicitly set to butt for background
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#2c2c2c';
+            ctx.lineWidth = 32;
+            ctx.stroke();
 
             // Draw glowing dashed circle (no rounded caps)
             ctx.save();
@@ -235,7 +266,7 @@
             const progressAngle = ((totalDuration - remainingTime) / totalDuration) * 2 * Math.PI;
             ctx.beginPath();
             ctx.lineCap = 'round'; // Apply rounded caps only to progress arc
-            ctx.arc(canvas.width / 2, canvas.height / 2, radius+1, -Math.PI / 2, progressAngle - Math.PI / 2, false);
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius + 1, -Math.PI / 2, progressAngle - Math.PI / 2, false);
             ctx.strokeStyle = "#ffffff";
             ctx.lineWidth = 24;
             ctx.stroke();
@@ -251,7 +282,7 @@
             ctx.shadowColor = 'rgba(255, 51, 85, 0.5)';
             ctx.shadowBlur = 10;
             ctx.fillStyle = '#ff3355';
-            ctx.font = '400 72px Source Code Pro';
+            ctx.font = '400 100px Source Code Pro';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(timeText, canvas.width / 2, canvas.height / 2);
@@ -267,8 +298,6 @@
             ctx.font = '300 28px Inria Sans';
             ctx.fillText('02:45HRS 3BRKS', canvas.width / 2, canvas.height / 2 + 66);
         }
-
-
 
 
         function updateTimer() {
